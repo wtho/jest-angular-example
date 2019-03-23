@@ -2,26 +2,79 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
 
-## Development server
+# Setup
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To create the project, the following commands were used:
 
-## Code scaffolding
+```bash
+ng new angular-jest
+cd angular-jest
+npm remove @types/jasmine @types/jasminewd2 jasmine-core jasmine-spec-reporter karma karma-chrome-launcher karma-coverage-istanbul-reporter karma-jasmine karma-jasmine-html-reporter protractor
+npm install -D jest jest-preset-angular @types/jest
+rm -r e2e
+rm src/test.ts src/karma.conf.js
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+and the following files have to be created:
 
-## Build
+## `jest.config.js`
+```ts
+module.exports = {
+  preset: 'jest-preset-angular',
+  setupFilesAfterEnv: ['<rootDir>/src/setupJest.ts']
+}
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## `src/tsconfig.spec.json`
+```json
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "types": [
+      "jest",
+      "node"
+    ]
+  },
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ]
+}
+```
 
-## Running unit tests
+## `src/setupJest.ts`
+```ts
+import 'jest-preset-angular';
+import './jestGlobalMocks';
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## `src/jestGlobalMocks.ts`
+```ts
+Object.defineProperty(document.body.style, 'transform', {
+  value: () => {
+    return 
+      enumerable: true,
+      configurable: true,
+    };
+  },
+});
+```
 
-## Running end-to-end tests
+Finally modify the scripts`package.json` to create a new job:
+```json
+{
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "lint": "ng lint",
+    "test": "jest"
+  }
+}
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Now the jest can be run using `npm test`.
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
