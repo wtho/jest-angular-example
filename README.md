@@ -25,10 +25,10 @@ module.exports = {
 }
 ```
 
-## `src/tsconfig.spec.json`
+## `tsconfig.spec.json`
 ```json
 {
-  "extends": "../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "esModuleInterop": true,
     "types": [
